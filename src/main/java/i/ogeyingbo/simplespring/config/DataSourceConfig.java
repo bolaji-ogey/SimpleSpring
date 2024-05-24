@@ -64,7 +64,7 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 {
     LocalContainerEntityManagerFactoryBean em
     = new LocalContainerEntityManagerFactoryBean();
-    em.setDataSource(dataSource());
+    em.setDataSource(primaryDataSource());
     em.setPackagesToScan(new String[] { "i.ogeyingbo.simplespring.entities" });
     JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
     em.setJpaVendorAdapter(vendorAdapter);
@@ -74,7 +74,7 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 
 
 @Bean
-public DataSource dataSource1() {
+public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("mysqluser");
@@ -86,8 +86,7 @@ public DataSource dataSource1() {
 
 
 @Bean
-//public DataSource primaryDataSource() {
-public DataSource dataSource() {
+public DataSource primaryDataSource() { 
     Properties dsProps = new Properties();
     dsProps.put("url", dataSourceUrl);
     dsProps.put("user", user);
