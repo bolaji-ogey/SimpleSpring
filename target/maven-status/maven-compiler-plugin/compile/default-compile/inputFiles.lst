@@ -1,0 +1,13 @@
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\entities\Book.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\DataSourceConfig.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\SimpleController.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\BookController.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\PersistenceJPAConfig.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\dao\PGDataRetriever.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\advice\BookIdMismatchException.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\SpringApp.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\SecurityConfig.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\advice\RestExceptionHandler.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\advice\BookNotFoundException.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\dao\PGDataSource.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\repository\BookRepository.java
