@@ -5,6 +5,7 @@
 package i.ogeyingbo.simplespring.dao;
 
 import i.ogeyingbo.simplespring.model.Employee;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.HashMap;
@@ -29,7 +30,7 @@ public class JdbcTemplateInterface {
  
     
      @Autowired
-    JdbcTemplate   jdbcTemplate;
+     JdbcTemplate   jdbcTemplate;
      
      @Autowired
      NamedParameterJdbcTemplate   namedParameterJdbcTemplate;
@@ -37,8 +38,21 @@ public class JdbcTemplateInterface {
      @Autowired
      DataSource  dataSource;
      
+    
      
+     /***
+     
+      public  Employee   getEmployeeById(int inId){  
+          String query = "SELECT * FROM EMPLOYEE WHERE ID = ? ";
+          Connection  cron  = dataSource.getConnection();
+          return  jdbcTemplate.queryForObject(
+              query,  new EmployeeRowMapper(), new Object[] { inId });
+        }
+       
+    ***/  
 
+     
+     
        public  Employee   getEmployeeById(int inId){  
           String query = "SELECT * FROM EMPLOYEE WHERE ID = ?";
           return  jdbcTemplate.queryForObject(

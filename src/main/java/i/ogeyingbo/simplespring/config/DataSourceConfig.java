@@ -5,28 +5,28 @@
 package i.ogeyingbo.simplespring.config;
 
 import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource;
+import com.zaxxer.hikari.HikariDataSource; 
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.core.JdbcOperations;
-import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author BOLAJI-OGEYINGBO
  */
-@Configuration
-@ComponentScan
+ 
+//@Configuration  
 class DataSourceConfig {
 
+    /***
  @Value("${spring.datasource.username}")
 private String user;
 
@@ -61,7 +61,7 @@ private int minimumIdle;
 private int idleTimeout;
 
 
- @Bean
+@Bean
 public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 {
     LocalContainerEntityManagerFactoryBean em
@@ -75,9 +75,8 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 }
 
 
-/***
-@Bean
-public DataSource dataSource1() {
+@Bean(name = "secondaryDataSource")
+public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("mysqluser");
@@ -85,10 +84,11 @@ public DataSource dataSource1() {
         dataSource.setUrl("jdbc:mysql://localhost:3306/myDb?createDatabaseIfNotExist=true");
     return dataSource;
 }
-***/
+ 
 
 
-@Bean 
+@Primary
+@Bean(name = "primaryDataSource")
 public DataSource primaryDataSource() { 
     Properties dsProps = new Properties();
     dsProps.put("url", dataSourceUrl);
@@ -115,7 +115,7 @@ public DataSource primaryDataSource() {
    return ds;
    }
 
-
+***/
   
     
     

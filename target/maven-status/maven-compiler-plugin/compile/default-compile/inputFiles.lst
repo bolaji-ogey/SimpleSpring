@@ -8,7 +8,9 @@ C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\repository\E
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\PersistenceJPAConfig.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\dao\PGDataRetriever.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\model\Employee.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\MultiDataSourceConfig.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\advice\BookIdMismatchException.java
+C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\dao\PGDataSourceRetriever.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\SpringApp.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\config\SecurityConfig.java
 C:\DBConnectors\SimpleSpring\src\main\java\i\ogeyingbo\simplespring\controller\advice\RestExceptionHandler.java

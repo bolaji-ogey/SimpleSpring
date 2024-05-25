@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
  *
  * @author BOLAJI-OGEYINGBO
  */
-@Component
+//@Component
 @Repository
 class   EmployeeRepository {
  

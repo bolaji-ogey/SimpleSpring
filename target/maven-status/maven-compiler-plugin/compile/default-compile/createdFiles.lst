@@ -2,7 +2,9 @@ i\ogeyingbo\simplespring\dao\PGDataSource.class
 i\ogeyingbo\simplespring\config\PersistenceJPAConfig.class
 i\ogeyingbo\simplespring\dao\PGDataRetriever.class
 i\ogeyingbo\simplespring\controller\SimpleController.class
+i\ogeyingbo\simplespring\dao\PGDataSourceRetriever.class
 i\ogeyingbo\simplespring\repository\EmployeeRepository.class
+i\ogeyingbo\simplespring\config\MultiDataSourceConfig.class
 i\ogeyingbo\simplespring\repository\BookRepository.class
 i\ogeyingbo\simplespring\entities\Book.class
 i\ogeyingbo\simplespring\config\DataSourceConfig.class
