@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcOperations;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -73,8 +75,9 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 }
 
 
+/***
 @Bean
-public DataSource dataSource() {
+public DataSource dataSource1() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUsername("mysqluser");
@@ -82,10 +85,10 @@ public DataSource dataSource() {
         dataSource.setUrl("jdbc:mysql://localhost:3306/myDb?createDatabaseIfNotExist=true");
     return dataSource;
 }
+***/
 
 
-
-@Bean
+@Bean 
 public DataSource primaryDataSource() { 
     Properties dsProps = new Properties();
     dsProps.put("url", dataSourceUrl);
@@ -113,4 +116,10 @@ public DataSource primaryDataSource() {
    }
 
 
-  } 
+  
+    
+    
+
+
+
+} 
