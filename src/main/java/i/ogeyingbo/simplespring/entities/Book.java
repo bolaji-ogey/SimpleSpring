@@ -9,7 +9,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.Data;
+import jakarta.persistence.Table;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,16 +24,17 @@ import lombok.Setter;
 @Getter @Setter @NoArgsConstructor 
 //@Data
 @Entity
+@Table(name = "book")
 public class Book {
  
     
     @GeneratedValue(strategy = GenerationType.AUTO)
     private @Id long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(name = "title", nullable = false, unique = true)
     private String title;
 
-    @Column(nullable = false)
+    @Column(name = "author", nullable = false)
     private String author;
     
     
