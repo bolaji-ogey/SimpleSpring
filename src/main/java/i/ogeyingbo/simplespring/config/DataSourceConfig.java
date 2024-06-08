@@ -5,18 +5,17 @@
 package i.ogeyingbo.simplespring.config;
 
 import com.zaxxer.hikari.HikariConfig;
-import com.zaxxer.hikari.HikariDataSource; 
+import com.zaxxer.hikari.HikariDataSource;
 import java.util.Properties;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
-import org.springframework.stereotype.Component;
 
 /**
  *
@@ -24,44 +23,45 @@ import org.springframework.stereotype.Component;
  */
  
 //@Configuration  
+@PropertySource("classpath:custom.properties")
 class DataSourceConfig {
 
-    /***
- @Value("${spring.datasource.username}")
-private String user;
+    
+       @Value("${spring.datasource.username}")
+       private String user;
 
-@Value("${spring.datasource.password}")
-private String password;
+       @Value("${spring.datasource.password}")
+       private String password;
 
-@Value("${spring.datasource.url}")
-private String dataSourceUrl;
+       @Value("${spring.datasource.url}")
+       private String dataSourceUrl;
 
-@Value("${spring.datasource.driver-class-name}")
-private String driverClassName;
+       @Value("${spring.datasource.driver-class-name}")
+       private String driverClassName;
 
-@Value("${spring.datasource.jdbcUrl}")
-private String jdbcUrl;
+       @Value("${spring.datasource.jdbcUrl}")
+       private String jdbcUrl;
 
-@Value("${spring.datasource.poolName}")
-private String poolName;
+       @Value("${spring.datasource.poolName}")
+       private String poolName;
 
-@Value("${spring.datasource.connectionTimeout}")
-private int connectionTimeout;
+       @Value("${spring.datasource.connectionTimeout}")
+       private int connectionTimeout;
 
-@Value("${spring.datasource.maxLifetime}")
-private int maxLifetime;
+       @Value("${spring.datasource.maxLifetime}")
+       private int maxLifetime;
 
-@Value("${spring.datasource.maximumPoolSize}")
-private int maximumPoolSize;
+       @Value("${spring.datasource.maximumPoolSize}")
+       private int maximumPoolSize;
 
-@Value("${spring.datasource.minimumIdle}")
-private int minimumIdle;
+       @Value("${spring.datasource.minimumIdle}")
+       private int minimumIdle;
 
-@Value("${spring.datasource.idleTimeout}")
-private int idleTimeout;
+       @Value("${spring.datasource.idleTimeout}")
+       private int idleTimeout;
 
 
-@Bean
+//@Bean
 public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 {
     LocalContainerEntityManagerFactoryBean em
@@ -75,7 +75,7 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 }
 
 
-@Bean(name = "secondaryDataSource")
+//@Bean(name = "secondaryDataSource")
 public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -88,7 +88,7 @@ public DataSource dataSource() {
 
 
 @Primary
-@Bean(name = "primaryDataSource")
+//@Bean(name = "primaryDataSource")
 public DataSource primaryDataSource() { 
     Properties dsProps = new Properties();
     dsProps.put("url", dataSourceUrl);
@@ -115,7 +115,7 @@ public DataSource primaryDataSource() {
    return ds;
    }
 
-***/
+ 
   
     
     

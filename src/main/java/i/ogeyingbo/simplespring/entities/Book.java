@@ -10,9 +10,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  *
@@ -21,15 +18,16 @@ import lombok.Setter;
 
 
 
-@Getter @Setter @NoArgsConstructor 
+//@Getter @Setter @NoArgsConstructor 
 //@Data
 @Entity
 @Table(name = "book")
 public class Book {
  
     
+    @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private @Id long id;
+    private   long id;
 
     @Column(name = "title", nullable = false, unique = true)
     private String title;
@@ -38,7 +36,7 @@ public class Book {
     private String author;
     
     
-     /***
+ 
       
     public  void  setId(long inId){
         id = inId;
@@ -68,7 +66,7 @@ public class Book {
     public  String  getAuthor(){
         return this.author;
     }
-    ***/
+    
     
     
 }

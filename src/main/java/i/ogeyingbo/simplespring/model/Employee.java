@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Email;
  *
  * @author BOLAJI-OGEYINGBO
  */
-@Data
+//@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -39,7 +39,7 @@ public class Employee {
     @Email(message = "Email is invalid")
     String email;
     
-    /***
+  
     public  void  setId(int inId){
         id = inId;
     }
@@ -57,6 +57,11 @@ public class Employee {
     public  void  setAddress(String inAddress){
         address = inAddress;
     }
+    
+    public  void  setEmail(String inEmail){
+        email = inEmail;
+    }
+    
     
     
     
@@ -79,6 +84,8 @@ public class Employee {
         return    address;
     }
     
-    ***/
+    public  String  getEmail(){
+        return    email;
+    }
     
 }
