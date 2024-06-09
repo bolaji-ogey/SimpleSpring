@@ -6,8 +6,10 @@ package i.ogeyingbo.simplespring.controller;
 
 import i.ogeyingbo.simplespring.controller.advice.BookIdMismatchException;
 import i.ogeyingbo.simplespring.controller.advice.BookNotFoundException;
+import i.ogeyingbo.online.bookstore.dao.PGDataRetriever;
 import i.ogeyingbo.simplespring.entities.Book;
 import i.ogeyingbo.simplespring.repository.BookRepository;
+import i.ogeyingbo.simplespring.repository.BookStoreRepository;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -31,10 +33,15 @@ public class BookController {
 
     @Autowired
     private BookRepository bookRepository;
+    
+    @Autowired
+    private BookStoreRepository   bookStoreRepository;
+   
+    
 
     @GetMapping
     public Iterable findAll() {
-        return bookRepository.findAll();
+        return  bookStoreRepository.getBookInventory(); 
     }
 
     @GetMapping("/title/{bookTitle}")
