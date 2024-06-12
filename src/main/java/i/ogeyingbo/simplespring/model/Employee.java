@@ -4,13 +4,17 @@
  */
 package i.ogeyingbo.simplespring.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.sql.Connection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.NoArgsConstructor; 
 import org.hibernate.validator.constraints.Email;
+import org.json.JSONObject;
 
 /**
  *
@@ -87,5 +91,77 @@ public class Employee {
     public  String  getEmail(){
         return    email;
     }
+    
+    
+    
+    
+        
+    public  final  JSONObject  convertToJSON(){
+        JSONObject  returnedJson =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+             objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+           returnedJson =  new JSONObject(objectMapper.writeValueAsString(this));
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            objectMapper = null;
+        }
+      return  returnedJson;
+    }
+    
+    
+    public  final  String  convertToJSONString(){
+        String  returnedJsonString =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            returnedJsonString  =   objectMapper.writeValueAsString(this);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            objectMapper = null;
+        }
+      return  returnedJsonString;
+    }
+     
+     
+    public  static final  Employee  readFromJSONAndLog(Connection con, final String  inObjectJSON){ 
+        Employee   employee  =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+              objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+              employee = objectMapper.readValue(inObjectJSON, Employee.class);
+             //  this.logRequest(con, inObjectJSON, true);
+            }catch(Exception ex){
+             // this.logRequest(con, inObjectJSON, false);
+                  ex.printStackTrace();
+            }finally{
+               objectMapper = null;
+            }
+        return  employee;
+    }
+     
+     
+     
+     
+    public  static final Employee  readFromJSON(String  inObjectJSON){ 
+        Employee  employee  =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+              objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+              employee = objectMapper.readValue(inObjectJSON, Employee.class);
+            }catch(Exception ex){
+                  ex.printStackTrace();
+            }finally{
+               objectMapper = null;
+            }
+        return  employee;
+    }
+    
+    
+    
+    
+    
     
 }
