@@ -5,16 +5,16 @@
 package i.ogeyingbo.simplespring.config;
 
 import com.zaxxer.hikari.HikariDataSource;
-import i.ogeyingbo.online.bookstore.dao.PGDataRetriever;
 import javax.sql.DataSource;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
+import org.springframework.transaction.PlatformTransactionManager;
 
 /**
  *
@@ -31,7 +31,8 @@ public class MultiDataSourceConfig {
     {
         LocalContainerEntityManagerFactoryBean em
         = new LocalContainerEntityManagerFactoryBean();
-        em.setDataSource(primaryDataSource());
+        em.setDataSource(dataSource());
+       // em.setDataSource(primaryDataSource());
         em.setPackagesToScan(new String[] { "i.ogeyingbo.simplespring.entities" });
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -40,7 +41,14 @@ public class MultiDataSourceConfig {
     }
 
     
-    @Primary
+    //@Primary
+    @Bean(name = "dataSource")
+    @ConfigurationProperties(prefix = "spring.datasource.hikari")
+    public DataSource  dataSource() {
+        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+    }
+    
+    //@Primary
     @Bean(name = "primaryDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.primary.hikari")
     public DataSource primaryDataSource() {
@@ -53,15 +61,16 @@ public class MultiDataSourceConfig {
         return DataSourceBuilder.create().type(HikariDataSource.class).build();
     }
    
+     
     
-    /***
+    
     @Bean
     public PlatformTransactionManager transactionManager() {
         JpaTransactionManager txManager = new JpaTransactionManager();
         txManager.setEntityManagerFactory(entityManagerFactory().getObject());
         return txManager;
     }
-    ****/
+   
     
     
     

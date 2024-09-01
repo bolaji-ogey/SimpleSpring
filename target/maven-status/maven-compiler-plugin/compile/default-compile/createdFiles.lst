@@ -69,3 +69,4 @@ i\ogeyingbo\resource\schedule\entities\Resource.class
 i\ogeyingbo\resource\schedule\entities\FacilitySchedule.class
 i\ogeyingbo\simplespring\controller\advice\BookIdMismatchException.class
 i\ogeyingbo\simplespring\pdf\JavaPdfExample.class
+i\ogeyingbo\simplespring\image\ImageHandler.class

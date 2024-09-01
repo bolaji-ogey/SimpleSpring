@@ -4,6 +4,8 @@
  */
 package i.ogeyingbo.resource.schedule.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -18,17 +20,21 @@ import lombok.Setter;
  *
  * @author BOLAJI-OGEYINGBO
  */
+
+@JsonPropertyOrder({"resourceId", "resourceReference",  "resourceEventReferences" })
 @Getter @Setter @NoArgsConstructor  
 @Entity
 @Table(name = "resource")
 public class Resource {
     
-   @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonProperty("resourceId")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private @Id long id;
 
+    @JsonProperty("resourceReference")
     @Column(name = "resource_reference", nullable = false, unique = true)
     private   String  resourceReference;  // Staff ID
 
-    @Column(name = "resource_event_references", nullable = false)
+    @Column(name = "resourceEventReferences", nullable = false)
     private String  resourceEventReferences; // Course codes seperated by comma.
 }

@@ -4,12 +4,18 @@
  */
 package i.ogeyingbo.simplespring.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
  *
@@ -17,11 +23,11 @@ import jakarta.persistence.Table;
  */
 
 
-
-//@Getter @Setter @NoArgsConstructor 
-//@Data
+@JsonPropertyOrder({"id","title","genre","isbn","author","year_published"})
+@Getter @Setter @NoArgsConstructor 
+@Data
 @Entity
-@Table(name = "book")
+@Table(name = "book_inventory")
 public class Book {
  
     
@@ -29,44 +35,27 @@ public class Book {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private   long id;
 
+    @JsonProperty("title")
     @Column(name = "title", nullable = false, unique = true)
     private String title;
-
+    
+    @JsonProperty("genre")
+    @Column(name = "genre", nullable = false)
+    private String genre;
+    
+    @JsonProperty("isbn")
+    @Column(name = "isbn", nullable = false)
+    private String isbn;
+    
+    
+    @JsonProperty("author")
     @Column(name = "author", nullable = false)
     private String author;
     
-    
- 
-      
-    public  void  setId(long inId){
-        id = inId;
-    }
+    @JsonProperty("year_published")
+    @Column(name = "year_published", nullable = false)
+    private String  yearPublished;
     
     
-   
-    public  void  setTitle(String  inTitle){
-        title = inTitle;
-    }
-    
-    
-    public  void  setAuthor(String  inAuthor){
-        author =  inAuthor;
-    }
-    
-    
-    public  long  getId(){
-        return  this.id;
-    }
-    
-    public  String  getTitle(){
-        return  this.title;
-    }
-    
-    
-    public  String  getAuthor(){
-        return this.author;
-    }
-    
-    
-    
+  
 }

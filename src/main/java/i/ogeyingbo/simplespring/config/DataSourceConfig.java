@@ -75,7 +75,7 @@ public LocalContainerEntityManagerFactoryBean entityManagerFactory()
 }
 
 
-//@Bean(name = "secondaryDataSource")
+@Bean(name = "secondaryDataSource")
 public DataSource dataSource() {
     DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
@@ -88,7 +88,7 @@ public DataSource dataSource() {
 
 
 @Primary
-//@Bean(name = "primaryDataSource")
+@Bean(name = "primaryDataSource")
 public DataSource primaryDataSource() { 
     Properties dsProps = new Properties();
     dsProps.put("url", dataSourceUrl);

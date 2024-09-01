@@ -4,6 +4,8 @@
  */
 package i.ogeyingbo.resource.schedule.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import i.ogeyingbo.resource.schedule.enums.EventType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,50 +21,72 @@ import lombok.Setter;
  *
  * @author BOLAJI-OGEYINGBO
  */
+
+@JsonPropertyOrder({"recipientEventSubscriptionId", "eventCalendarId",  
+               "recipientReference",   "eventReference", "eventSubscriptionId" })
 @Getter @Setter @NoArgsConstructor  
 @Entity
 @Table(name = "recipient_schedules")
 public class RecipientSchedule {
     
+    @JsonProperty("resourceScheduleId")
     @GeneratedValue(strategy = GenerationType.AUTO)
     private @Id long id;
     
+    
+    @JsonProperty("eventId")
     @Column(name = "event_id", nullable = false)
     private long eventId;
-      
+    
+    
+    @JsonProperty("eventSubscriptionId")
     @Column(name = "event_subscription_id", nullable = false)
     private String  eventSubscriptionId; // Course code
     
+    
+    @JsonProperty("eventReference")
     @Column(name = "event_reference", nullable = false)
     private String  eventReference; 
     
+    
+    @JsonProperty("eventType")
     @Column(name = "event_type", nullable = false)
     private EventType  eventType; 
-      
+    
+    
+    @JsonProperty("facilityReference")
     @Column(name = "facility_reference", nullable = false)
     private String  facilityReference; // default is time or day
-     
+    
+    
+    @JsonProperty("eventDay")
     @Column(name = "event_day", nullable = false)
     private int  eventDay; // default is time or day
     
-   @Column(name = "event_month", nullable = false)
+    
+    @JsonProperty("eventMonth")
+    @Column(name = "event_month", nullable = false)
     private String  eventMonth; // default is time or day
      
+    @JsonProperty("eventYear")
     @Column(name = "event_year", nullable = false)
     private int  eventYear; // default is time or day
     
+    
+    @JsonProperty("eventStartTime")
     @Column(name = "event_start_time", nullable = false)
     private int  eventStartTime;  
     
-    
+    @JsonProperty("eventEndTime")
     @Column(name = "event_end_time", nullable = false)
     private int  eventEndTime;  
     
      
-     
+    @JsonProperty("recipientEventSubscriptionId")
     @Column(name = "recipient_event_subscription_id", nullable = false)
     private String  recipientEventSubscriptionId; // Oourse Code
     
+    @JsonProperty("recipientEventReference")
     @Column(name = "recipient_event_reference", nullable = false)
     private String  recipientEventReference; 
     
