@@ -7,7 +7,9 @@ package i.ogeyingbo.walletaccount.controller;
 import i.ogeyingbo.simplespring.entities.Profile;
 import i.ogeyingbo.walletaccount.entities.Account;
 import i.ogeyingbo.walletaccount.entities.AccountProfile;
+import i.ogeyingbo.walletaccount.model.AccountProfileModel;
 import i.ogeyingbo.walletaccount.requests.AccountBlockReq;
+import i.ogeyingbo.walletaccount.requests.AccountLookupReq;
 import i.ogeyingbo.walletaccount.requests.AccountNameEnquiryReq;
 import i.ogeyingbo.walletaccount.requests.AccountNameUpdateReq;
 import i.ogeyingbo.walletaccount.requests.AccountStatementReq;
@@ -116,13 +118,22 @@ ResponseEntity<String>   accountDetails(@Valid @RequestBody   AccountNameEnquiry
 
 @PostMapping("/account_name_update")
 ResponseEntity<String>   accountNameUpdate(@Valid @RequestBody   AccountNameUpdateReq   accountNameUpdateReq){ 
-    AccountProfile   accountProfile = new AccountProfile();
-     accountProfile.initAccountProfile(accountNameUpdateReq);
+    AccountProfileModel   accountProfileModel = new AccountProfileModel();
+     accountProfileModel.initAccountProfile(accountNameUpdateReq);
      
-     accountService.doAccountNameUpdate(accountProfile);
+     JSONObject   jsonObject =  accountService.updateAccountProfile(accountProfileModel);
    // return ResponseEntity.ok("Account is unblocked");   
    return ResponseEntity.ok(jsonObject.toString());  
 }
+
+ 
+@PostMapping("/account_profile")
+ResponseEntity<String>   accountProfileDetail(@Valid @RequestBody   AccountLookupReq   inAccountLookupReq){ 
+     JSONObject   jsonObject =  accountService.getAccountProfileDetail(inAccountLookupReq.getCustomerReference());
+    // return ResponseEntity.ok("Account is unblocked");  
+    return ResponseEntity.ok(jsonObject.toString());  
+}
+
 
 
 
@@ -135,54 +146,33 @@ ResponseEntity<String>   accountStatement(@Valid @RequestBody   AccountStatement
 
 
 
-  @GetMapping("/")
-  public String home() {
 
-    return "redirect:/profiles/view";
-  }
+@PostMapping("/fund_transfer")
+ResponseEntity<String>   doFundTransfer(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
+    JSONObject   jsonObject =   accountService.doFundTransfer(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+   // return ResponseEntity.ok("Account is unblocked");  
+   return ResponseEntity.ok(jsonObject.toString());  
+}
 
-  @GetMapping("/profiles/view")
-  public ModelAndView view(Model model) {
 
-    return new ModelAndView("view", "profiles", profileService.getAll());
-  }
 
-  
-  @GetMapping(value = "/image/{imageId}", produces = MediaType.IMAGE_JPEG_VALUE)
-  public ByteArrayResource downloadImage(@PathVariable Long imageId) {
-    byte[] image = profileService.findById(imageId)
-        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND))
-        .getImageData();
+@PostMapping("/transaction_status_query")
+ResponseEntity<String>   trxnStatusQuery(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
+    JSONObject   jsonObject =   accountService.getTrxnStatus(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+   // return ResponseEntity.ok("Account is unblocked");  
+   return ResponseEntity.ok(jsonObject.toString());  
+}
 
-    return new ByteArrayResource(image);
-  }
 
-  
-  
-  @GetMapping("/profiles/add")
-  public ModelAndView addProfile() {
 
-    return new ModelAndView("addProfile", "profile", new Profile());
-  }
+@PostMapping("/account_trxn_list")
+ResponseEntity<String>   accountTrxnList(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
+    JSONObject   jsonObject =   accountService.getAccountTrxnList(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+   // return ResponseEntity.ok("Account is unblocked");  
+   return ResponseEntity.ok(jsonObject.toString());  
+}
 
-  @PostMapping(value = "/profiles/add", consumes = MULTIPART_FORM_DATA_VALUE)
-  public String handleProfileAdd(Profile profile, @RequestPart("file") MultipartFile file) {
-
-   //  log.info("handling request parts: {}", file);
-    profileService.save(profile, file);
-    return "redirect:/profiles/view";
-  }
-  
-  
-  
-     @PostMapping("/users")
-    ResponseEntity<String> addUser(@Valid @RequestBody User user) {
-        return ResponseEntity.ok("User is valid");
-    }
-  
-   
-    
-    
+ 
    
     
     

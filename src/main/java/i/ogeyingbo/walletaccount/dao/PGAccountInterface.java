@@ -440,13 +440,13 @@ public class PGAccountInterface {
            AccountProfileModel   accountProfileModel = null;
            StringBuilder   sbQuery  =  new StringBuilder(250);
              
-           try { 
+           try {  
                    
                 cron   =  pgDataSource.getConnect();                
                 System.out.println("cron = "+cron);
               
-                sbQuery.append("SELECT  account_number, account_name  ");
-                sbQuery.append("");
+                sbQuery.append("SELECT  customer_reference,  first_name, middle_name, last_name, bvn,  ");
+                sbQuery.append(" email, phone_number, date_of_birth,  address, location, state, country  ");
                 sbQuery.append("FROM   account_profile  WHERE  customer_reference = ? ");
                 
                 prepStmnt =    cron.prepareStatement(sbQuery.toString());
@@ -458,8 +458,19 @@ public class PGAccountInterface {
 
                         accountProfileModel  =  new  AccountProfileModel();
                         
-                        accountProfileModel.setAccountNumber(row.getString("account_number"));
-                        accountProfileModel.setAccountName(row.getString("account_name")); 
+                        accountProfileModel.setCustomerReference(row.getString("customer_reference"));
+                        accountProfileModel.setFirstName(row.getString("first_name")); 
+                        accountProfileModel.setMiddleName(row.getString("middle_name")); 
+                        accountProfileModel.setLastName(row.getString("last_name")); 
+                        accountProfileModel.setBvn(row.getString("bvn")); 
+                        accountProfileModel.setEmail(row.getString("email")); 
+                        accountProfileModel.setPhoneNumber(row.getString("phone_number")); 
+                        
+                        accountProfileModel.setDateOfBirth(row.getString("date_of_birth")); 
+                        accountProfileModel.setAddress(row.getString("address")); 
+                        accountProfileModel.setLocation(row.getString("location"));
+                        accountProfileModel.setState(row.getString("state")); 
+                        accountProfileModel.setCountry(row.getString("country"));
                          
                     } 
                   
@@ -483,7 +494,7 @@ public class PGAccountInterface {
                     ex.printStackTrace();
                 }
             } 
-           return   accountModel;
+           return   accountProfileModel;
        }
      
      

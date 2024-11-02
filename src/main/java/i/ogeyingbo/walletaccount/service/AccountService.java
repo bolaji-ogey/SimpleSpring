@@ -198,6 +198,8 @@ public class AccountService {
   }
    
   
+ 
+  
   
   
   public  JSONObject  updateAccountProfile(AccountProfileModel   inAccountProfileModel) {
@@ -237,6 +239,59 @@ public class AccountService {
     return   jsonObject;
   }
   
+  
+  
+  
+   public  JSONObject  getAccountProfileDetail(String    inCustomerRef) {
+    JSONObject   jsonObject =  new JSONObject();
+    JSONObject   respData =  new JSONObject(); 
+    
+    try { 
+      AccountProfileModel   accountProfileModel  = pgAccountInterface.getAccountProfileDetail(inCustomerRef);
+      if(accountProfileModel !=  null){
+          
+        jsonObject.put("responseCode", "00");
+        jsonObject.put("responseMessage", "Account profile is found ");
+         
+        respData.put("customerReference", accountProfileModel.getCustomerReference());
+         
+        respData.put("firstName", accountProfileModel.getFirstName()); 
+        respData.put("middleName", accountProfileModel.getMiddleName());
+        respData.put("lastName", accountProfileModel.getLastName());     
+     
+        respData.put("bvn", accountProfileModel.getBvn()); 
+        respData.put("email", accountProfileModel.getEmail());
+        respData.put("phoneNumber", accountProfileModel.getPhoneNumber());
+        respData.put("dateOfBirth", accountProfileModel.getDateOfBirth());
+        respData.put("address", accountProfileModel.getAddress());
+        respData.put("location", accountProfileModel.getLocation());
+        respData.put("state", accountProfileModel.getState());
+        
+        respData.put("country", accountProfileModel.getCountry());
+        
+        jsonObject.put("data", respData);
+      }else{
+         StringBuilder  responseMssg  =  new StringBuilder(50);
+         responseMssg.append("Account profile:  ").append(inCustomerRef).append(" could NOT be found");
+         jsonObject.put("responseCode", "07");
+         jsonObject.put("responseMessage", responseMssg);
+         jsonObject.put("data", "-");
+      }
+    } catch (Exception e) {
+     // log.debug("Some internal error occurred", e);
+         StringBuilder  responseMssg  =  new StringBuilder(50);
+         responseMssg.append("Error occured while finding account profile:  ").append(inCustomerRef);
+         jsonObject.put("responseCode", "03");
+         jsonObject.put("responseMessage", responseMssg);
+         jsonObject.put("data", "-");
+    }
+    return   jsonObject;
+  }
+   
+   
+   
+   
+   
   
   
   public JSONObject  getAccountStatement(Account  account) {

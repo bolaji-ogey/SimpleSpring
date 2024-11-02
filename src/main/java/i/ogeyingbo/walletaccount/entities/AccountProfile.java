@@ -5,6 +5,7 @@
  */
 package i.ogeyingbo.walletaccount.entities;
  
+import i.ogeyingbo.walletaccount.requests.AccountNameUpdateReq;
 import i.ogeyingbo.walletaccount.requests.OpenAccountReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -12,7 +13,6 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table; 
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -75,7 +75,7 @@ public class  AccountProfile {
     @Column(name = "country") 
     private String  country;
     
-    
+    /***
     @Size(min = 3, max = 6)
     @Column(name = "product_code") 
     private String  productCode;
@@ -83,7 +83,7 @@ public class  AccountProfile {
     
     @Column(name = "is_active")  
     private  boolean   isActive;
-    
+    ***/
     
     
     public  void  initAccountProfile(OpenAccountReq   inOpenAccountReq){
@@ -102,10 +102,27 @@ public class  AccountProfile {
         
         state  =  inOpenAccountReq.getState();
         country   =  inOpenAccountReq.getCountry();
-        productCode  =  inOpenAccountReq.getProductCode();
-        isActive  =  true;
+        
     }
     
+    
+    
+    
+    public  void  initAccountProfileForUpdate(AccountNameUpdateReq   inAccountNameUpdateReq){
+        customerReference  =  inAccountNameUpdateReq.getCustomerReference(); 
+        lastName  =  inAccountNameUpdateReq.getLastName();
+         
+        email   =  inAccountNameUpdateReq.getEmail();
+        phoneNumber  =  inAccountNameUpdateReq.getPhoneNumber();
+        
+        dateOfBirth  =  inAccountNameUpdateReq.getDateOfBirth();
+        address   =  inAccountNameUpdateReq.getAddress();
+        location  =  inAccountNameUpdateReq.getLocation();
+        
+        state  =  inAccountNameUpdateReq.getState();
+        country   =  inAccountNameUpdateReq.getCountry();
+        
+    }
     
     
     
