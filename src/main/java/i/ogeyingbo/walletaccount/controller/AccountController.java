@@ -108,7 +108,7 @@ ResponseEntity<String>   accountNameEnquiry(@Valid @RequestBody   AccountNameEnq
 
 @PostMapping("/account_details")
 ResponseEntity<String>   accountDetails(@Valid @RequestBody   AccountNameEnquiryReq   accountNameEnquiryReq){ 
-     JSONObject   jsonObject =  accountService.getAccountDetails(accountNameEnquiryReq.getAccountNumber(),   accountNameEnquiryReq.getBankCode());
+     JSONObject   jsonObject =  accountService.getAccountDetails(accountNameEnquiryReq.getAccountNumber());
     // return ResponseEntity.ok("Account is unblocked");  
     return ResponseEntity.ok(jsonObject.toString());  
 }
@@ -116,7 +116,10 @@ ResponseEntity<String>   accountDetails(@Valid @RequestBody   AccountNameEnquiry
 
 @PostMapping("/account_name_update")
 ResponseEntity<String>   accountNameUpdate(@Valid @RequestBody   AccountNameUpdateReq   accountNameUpdateReq){ 
-     accountService.doAccountNameUpdate(accountNameEnquiryReq.getAccountNumber(),   accountNameEnquiryReq.getBankCode());
+    AccountProfile   accountProfile = new AccountProfile();
+     accountProfile.initAccountProfile(accountNameUpdateReq);
+     
+     accountService.doAccountNameUpdate(accountProfile);
    // return ResponseEntity.ok("Account is unblocked");   
    return ResponseEntity.ok(jsonObject.toString());  
 }

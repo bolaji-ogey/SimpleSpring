@@ -4,7 +4,6 @@
  */
 package i.ogeyingbo.walletaccount.dao;
 
-import i.ogeyingbo.online.bookstore.model.InventoryBook;
 import i.ogeyingbo.online.bookstore.model.objects.InventoryBook;
 import i.ogeyingbo.online.bookstore.model.objects.ShoppingCartBook;
 import i.ogeyingbo.online.bookstore.model.objects.UserProfile;
@@ -12,6 +11,8 @@ import i.ogeyingbo.online.bookstore.model.objects.UserPurchaseHistory;
 import i.ogeyingbo.online.bookstore.model.objects.ShoppingCart;
 import i.ogeyingbo.online.bookstore.model.objects.UserPurchase;
 import i.ogeyingbo.walletaccount.model.AccountModel;
+import i.ogeyingbo.walletaccount.model.AccountNameModel;
+import i.ogeyingbo.walletaccount.model.AccountProfileModel;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -204,9 +205,7 @@ public class PGAccountInterface {
            return   accountModel;
        }
      
-     
-     
-     
+      
     
      public     AccountModel    getAccountDetail(String  inAccountNo){
           
@@ -221,8 +220,7 @@ public class PGAccountInterface {
                 cron   =  pgDataSource.getConnect();                
                 System.out.println("cron = "+cron);
               
-                sbQuery.append("SELECT  account_number, account_name  ");
-                sbQuery.append("");
+                sbQuery.append("SELECT  account_number, account_name  "); 
                 sbQuery.append("FROM  wallet_account  WHERE  account_number = ? ");
                 
                 prepStmnt =    cron.prepareStatement(sbQuery.toString());
@@ -266,7 +264,227 @@ public class PGAccountInterface {
      
      
      
+       public     AccountNameModel    getAccountNumberAndProfileName(String  inCustomerReference){
+          
+           PreparedStatement    prepStmnt =    null; 
+           ResultSet row = null; 
+           Connection  cron   = null;
+           AccountNameModel   accountNameModel = null;
+           StringBuilder   sbQuery  =  new StringBuilder(250);
+             
+           try { 
+                   
+                cron   =  pgDataSource.getConnect();                
+                System.out.println("cron = "+cron);
+              
+                sbQuery.append("SELECT  ap.first_name, ap.middle_name, ap.last_name, wa.account_number, wa.account_name  "); 
+                sbQuery.append(" FROM   account_profile  ap  join   wallet_account  wa "); 
+                sbQuery.append(" ON (wa.customer_reference  =  ap.customer_reference) "); 
+                sbQuery.append("  WHERE  ap.customer_reference = ? ");
+                
+                prepStmnt =    cron.prepareStatement(sbQuery.toString());
+                prepStmnt.setString(1, inCustomerReference);
+                row = prepStmnt.executeQuery();
+                  
+                    // Parameters start with 1
+                    while (row.next()) {
+
+                        accountNameModel  =  new  AccountNameModel();
+                        
+                        accountNameModel.setFirstName(row.getString("first_name"));
+                        accountNameModel.setMiddleName(row.getString("middle_name"));                         
+                        accountNameModel.setLastName(row.getString("last_name"));
+                        
+                        accountNameModel.setAccountNumber(row.getString("account_number"));                          
+                        accountNameModel.setAccountName(row.getString("account_name")); 
+                         
+                    } 
+                  
+               // custPool.closePoolConnection(identKey); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }  finally{  
+                 try{
+                     if(prepStmnt !=  null){
+                        prepStmnt.cancel();
+                        prepStmnt.close();
+                    }
+                    
+                    if(row != null){
+                        row.close();
+                    } 
+                    if(cron != null){
+                        cron.close();
+                    }
+                } catch (Exception ex) {  
+                    ex.printStackTrace();
+                }
+            } 
+           return   accountNameModel;
+       }
+     
+       
+       
+       
+       
+     
+     public    int     updateAccountProfile(AccountProfileModel   inAccountProfileModel){
+          
+          StringBuilder   updateQuery;
+           PreparedStatement    prepStmnt =    null; 
+           int   resultCount  =  0;
+           Connection  cron   = null;
+           String subQuery  =  "";
+           String  updateValue =  "";
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("lastName")){
+               subQuery =  " SET  last_name =  ? ";
+               updateValue =  inAccountProfileModel.getLastName();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("dateOfBirth")){
+               subQuery =  " SET  date_of_birth =  ? ";
+               updateValue =  inAccountProfileModel.getDateOfBirth();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("email")){
+               subQuery =  " SET  email =  ? ";
+               updateValue =  inAccountProfileModel.getEmail();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("phoneNumber")){
+               subQuery =  " SET  phone_number =  ? ";
+               updateValue =  inAccountProfileModel.getPhoneNumber();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("address")){
+               subQuery =  " SET  address  =  ? ";
+               updateValue =  inAccountProfileModel.getAddress();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("location")){
+               subQuery =  " SET  location =  ? ";
+               updateValue =  inAccountProfileModel.getLocation();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("state")){
+               subQuery =  " SET  state =  ? ";
+               updateValue =  inAccountProfileModel.getState();
+           }
+           
+           if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("country")){
+               subQuery =  " SET  country =  ? ";
+               updateValue =  inAccountProfileModel.getCountry();
+           }
+               
+            
+           try { 
+                
+                 updateQuery  =  new  StringBuilder(150);
+                updateQuery.append(" UPDATE    account_profile  ").append(subQuery);  
+                updateQuery.append("  WHERE  customer_reference  = ?  ");  
+                              
+                cron   =  pgDataSource.getConnect();                
+                System.out.println("cron = "+cron);
+                
+                prepStmnt =    cron.prepareStatement(updateQuery.toString());
+                 
+                prepStmnt.setString(1, updateValue);
+                prepStmnt.setString(2, inAccountProfileModel.getCustomerReference()); 
+                        
+                resultCount = prepStmnt.executeUpdate();
+                
+                AccountNameModel   accountNameModel  =  getAccountNumberAndProfileName(inAccountProfileModel.getCustomerReference());
+                
+                
+                if(inAccountProfileModel.getDataToUpdate().equalsIgnoreCase("lastName")){
+                    prepStmnt =    cron.prepareStatement("UPDATE  wallet_account  SET  account_name  = ?  WHERE  account_number = ? ");
+                    
+                    prepStmnt.setString(1, accountNameModel.getNewAccountName());
+                    prepStmnt.setString(2, inAccountProfileModel.getCustomerReference()); 
+
+                    resultCount = prepStmnt.executeUpdate();
+                }
+                           
+               // custPool.closePoolConnection(identKey); 
+            } catch (Exception e) {
+                 
+                e.printStackTrace();
+            }  finally{ 
+               updateQuery = null;
+                 try{
+                     if(prepStmnt !=  null){
+                        prepStmnt.cancel();
+                        prepStmnt.close();
+                    }
+                     
+                    if(cron != null){
+                        cron.close();
+                    }
+                } catch (Exception ex) {  
+                    ex.printStackTrace();
+                }
+            } 
+           return   resultCount;
+       }
+     
+     
+     
+     
       
+      public     AccountProfileModel    getAccountProfileDetail(String  inCustomerReference){
+          
+           PreparedStatement    prepStmnt =    null; 
+           ResultSet row = null; 
+           Connection  cron   = null;
+           AccountProfileModel   accountProfileModel = null;
+           StringBuilder   sbQuery  =  new StringBuilder(250);
+             
+           try { 
+                   
+                cron   =  pgDataSource.getConnect();                
+                System.out.println("cron = "+cron);
+              
+                sbQuery.append("SELECT  account_number, account_name  ");
+                sbQuery.append("");
+                sbQuery.append("FROM   account_profile  WHERE  customer_reference = ? ");
+                
+                prepStmnt =    cron.prepareStatement(sbQuery.toString());
+                prepStmnt.setString(1, inCustomerReference);
+                row = prepStmnt.executeQuery();
+                  
+                    // Parameters start with 1
+                    while (row.next()) {
+
+                        accountProfileModel  =  new  AccountProfileModel();
+                        
+                        accountProfileModel.setAccountNumber(row.getString("account_number"));
+                        accountProfileModel.setAccountName(row.getString("account_name")); 
+                         
+                    } 
+                  
+               // custPool.closePoolConnection(identKey); 
+            } catch (Exception e) {
+                e.printStackTrace();
+            }  finally{  
+                 try{
+                     if(prepStmnt !=  null){
+                        prepStmnt.cancel();
+                        prepStmnt.close();
+                    }
+                    
+                    if(row != null){
+                        row.close();
+                    } 
+                    if(cron != null){
+                        cron.close();
+                    }
+                } catch (Exception ex) {  
+                    ex.printStackTrace();
+                }
+            } 
+           return   accountModel;
+       }
      
      
      

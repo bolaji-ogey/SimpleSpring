@@ -10,6 +10,8 @@ import lombok.extern.slf4j.Slf4j;
 import i.ogeyingbo.walletaccount.entities.Account;
 import i.ogeyingbo.walletaccount.entities.AccountProfile;
 import i.ogeyingbo.walletaccount.model.AccountModel;
+import i.ogeyingbo.walletaccount.model.AccountNameModel;
+import i.ogeyingbo.walletaccount.model.AccountProfileModel;
 import i.ogeyingbo.walletaccount.repository.AccountProfileRepository;
 import i.ogeyingbo.walletaccount.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -198,15 +200,39 @@ public class AccountService {
   
   
   
-  public  JSONObject  doAccountNameUpdate(Account  account) {
+  public  JSONObject  updateAccountProfile(AccountProfileModel   inAccountProfileModel) {
     JSONObject   jsonObject =  new JSONObject();
+    JSONObject   respData =  new JSONObject();
+    JSONObject   accountProvider =  new JSONObject();
     try { 
-      accountRepository.update(account);
-      jsonObject.put("responseCode", "00");
-      jsonObject.put("responseMessage", "Account is created");
-      jsonObject.put("data", "-");
+      if(pgAccountInterface.updateAccountProfile(inAccountProfileModel)  == 1){
+          AccountNameModel   accountNameModel  = pgAccountInterface.getAccountNumberAndProfileName(inAccountProfileModel.getCustomerReference());
+            jsonObject.put("responseCode", "00");
+            jsonObject.put("responseMessage", "Account is updated");
+            
+              respData.put("accountNumber", accountNameModel.getAccountNumber());
+              respData.put("accountName", accountNameModel.getAccountName());
+
+              accountProvider.put("bankCode", "321");
+              accountProvider.put("bankName", "open_cooperative");
+
+              respData.put("providerBank", accountProvider);
+
+              jsonObject.put("data", respData);
+      }else{
+         StringBuilder  responseMssg  =  new StringBuilder(50);
+         responseMssg.append("Error occured while updating account:  ").append(inAccountProfileModel.getOldAccountName());
+         jsonObject.put("responseCode", "03");
+         jsonObject.put("responseMessage", responseMssg);
+         jsonObject.put("data", "-"); 
+      }
     } catch (Exception e) {
      // log.debug("Some internal error occurred", e);
+         StringBuilder  responseMssg  =  new StringBuilder(50);
+         responseMssg.append("Error occured while trying to update account for profile:  ").append(inAccountProfileModel.getCustomerReference());
+         jsonObject.put("responseCode", "03");
+         jsonObject.put("responseMessage", responseMssg);
+         jsonObject.put("data", "-");
     }
     return   jsonObject;
   }

@@ -48,6 +48,10 @@ public class  Account {
     @Column(name = "bvn") 
     private String  bvn;
     
+    @Size(min = 3, max = 6)
+    @Column(name = "product_code") 
+    private String  productCode;
+    
     @Column(name = "is_active") 
     private  boolean  isActive = true;
     
@@ -81,6 +85,7 @@ public class  Account {
         customerReference  =  inOpenAccountReq.getCustomerReference();
         accountName  =  acctName.toString();         
         bvn  =  inOpenAccountReq.getBvn();  
+        productCode  =  inOpenAccountReq.getProductCode(); 
         isActive  =  true;
     }
     
