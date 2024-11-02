@@ -5,6 +5,7 @@
  */
 package i.ogeyingbo.walletaccount.entities;
  
+import i.ogeyingbo.walletaccount.requests.OpenAccountReq;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "wallet_accounts")
+@Table(name = "wallet_account")
 public class  Account {
 
     @Id
@@ -34,51 +35,54 @@ public class  Account {
     @Column(name = "customer_reference") 
     private  String  customerReference;
     
-    @Column(name = "first_name") 
-    private String  firstName;
+    @Column(name = "account_number") 
+    private String  accountNumber;
     
-    @Column(name = "middle_name") 
-    private String  middleName;
+    @Column(name = "account_name") 
+    private String  accountName;
     
-    @Column(name = "last_name") 
-    private String  lastName;
+    @Column(name = "bank_code") 
+    private String  bankCode;
      
     
     @Column(name = "bvn") 
     private String  bvn;
     
-    
-    @Column(name = "email") 
-    private String  email;
-    
-    
-    @Column(name = "phone_number") 
-    private String  phoneNumber;
-    
-    
-    @Column(name = "date_of_birth") 
-    private String  dateOfBirth;
-    
-    
-    @Column(name = "address") 
-    private String  address;
-    
-    @Column(name = "location") 
-    private String  location;
-    
-    
-    @Column(name = "state")  
-    private String  state;
+    @Column(name = "is_active") 
+    private  boolean  isActive = true;
     
      
-    @Column(name = "country") 
-    private String  country;
+    
+    @Column(name = "date_opened") 
+    private String  dateOpened;
     
     
-    @Size(min = 3, max = 6)
-    @Column(name = "product_code") 
-    private String  productCode;
+    @Column(name = "last_trxn_date") 
+    private String  lastTrxnDate;
     
+    @Column(name = "last_credit_date") 
+    private String  lastCreditDate;
+    
+    
+    @Column(name = "last_debit_date")  
+    private String  last_debit_date;
+    
+      
+    
+    
+    
+    public  void  initAccount(OpenAccountReq   inOpenAccountReq){
+        
+        StringBuilder  acctName  =  new  StringBuilder(100);
+        acctName.append(inOpenAccountReq.getFirstName()).append(" ");
+        acctName.append(inOpenAccountReq.getMiddleName()).append(" ");
+        acctName.append(inOpenAccountReq.getLastName()).append(" ");
+        
+        customerReference  =  inOpenAccountReq.getCustomerReference();
+        accountName  =  acctName.toString();         
+        bvn  =  inOpenAccountReq.getBvn();  
+        isActive  =  true;
+    }
     
     
     

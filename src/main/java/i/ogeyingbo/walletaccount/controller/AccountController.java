@@ -5,12 +5,21 @@
 package i.ogeyingbo.walletaccount.controller;
 
 import i.ogeyingbo.simplespring.entities.Profile;
+import i.ogeyingbo.walletaccount.entities.Account;
+import i.ogeyingbo.walletaccount.entities.AccountProfile;
+import i.ogeyingbo.walletaccount.requests.AccountBlockReq;
+import i.ogeyingbo.walletaccount.requests.AccountNameEnquiryReq;
+import i.ogeyingbo.walletaccount.requests.AccountNameUpdateReq;
+import i.ogeyingbo.walletaccount.requests.AccountStatementReq;
+import i.ogeyingbo.walletaccount.requests.AccountUnblockReq;
 import i.ogeyingbo.walletaccount.requests.OpenAccountReq;
+import i.ogeyingbo.walletaccount.service.AccountService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.h2.engine.User;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
@@ -41,26 +50,87 @@ import org.springframework.web.servlet.ModelAndView;
 //@Controller
 @RestController
 @Slf4j
-@RequestMapping("/account")
+@RequestMapping("/account-service")
 public class AccountController {
     
   @Autowired
-  private  AccounteService  accountService;
+  private  AccountService  accountService;
   
   
   @GetMapping("/")
   public String home() {
-
-    return "redirect:/profiles/view";
+    return "redirect:/account/view";
   }
   
   
 @PostMapping("/account_open")
 ResponseEntity<String>   createAccount(@Valid @RequestBody  OpenAccountReq   newAccountOpen) {
-     accountService.createNewAccount(newAccountOpen);
-    return ResponseEntity.ok("User is valid");
-   
+     AccountProfile   accountProfile = new AccountProfile();
+     accountProfile.initAccountProfile(newAccountOpen);
+     
+     Account   account = new Account();
+     account.initAccount(newAccountOpen);
+     
+     JSONObject   jsonObject = accountService.createNewAccount(accountProfile, account);
+   // return ResponseEntity.ok("Account is created");   
+   return ResponseEntity.ok(jsonObject.toString());  
 }
+
+
+
+
+@PostMapping("/account_block")
+ResponseEntity<String>   accountBlock(@Valid @RequestBody   AccountBlockReq   accountBlock) {  
+    JSONObject   jsonObject =   accountService.blockAccount(accountBlock.getAccountNumber(),   accountBlock.getReason());
+  //  return ResponseEntity.ok("Account is blocked");  
+    return ResponseEntity.ok(jsonObject.toString()); 
+}
+
+
+
+@PostMapping("/account_unblock")
+ResponseEntity<String>   accountUnblock(@Valid @RequestBody   AccountUnblockReq   accountUnblock){ 
+     JSONObject   jsonObject =  accountService.unBlockAccount(accountUnblock.getAccountNumber(),   accountUnblock.getReason());
+   // return ResponseEntity.ok("Account is unblocked");   
+   return ResponseEntity.ok(jsonObject.toString());  
+}
+
+
+
+@PostMapping("/account_name_enquiry")
+ResponseEntity<String>   accountNameEnquiry(@Valid @RequestBody   AccountNameEnquiryReq   accountNameEnquiryReq){ 
+     JSONObject   jsonObject =  accountService.findByAccountNo(accountNameEnquiryReq.getAccountNumber(),   accountNameEnquiryReq.getBankCode());
+    // return ResponseEntity.ok("Account is unblocked");  
+    return ResponseEntity.ok(jsonObject.toString());  
+}
+
+
+
+@PostMapping("/account_details")
+ResponseEntity<String>   accountDetails(@Valid @RequestBody   AccountNameEnquiryReq   accountNameEnquiryReq){ 
+     JSONObject   jsonObject =  accountService.getAccountDetails(accountNameEnquiryReq.getAccountNumber(),   accountNameEnquiryReq.getBankCode());
+    // return ResponseEntity.ok("Account is unblocked");  
+    return ResponseEntity.ok(jsonObject.toString());  
+}
+
+
+@PostMapping("/account_name_update")
+ResponseEntity<String>   accountNameUpdate(@Valid @RequestBody   AccountNameUpdateReq   accountNameUpdateReq){ 
+     accountService.doAccountNameUpdate(accountNameEnquiryReq.getAccountNumber(),   accountNameEnquiryReq.getBankCode());
+   // return ResponseEntity.ok("Account is unblocked");   
+   return ResponseEntity.ok(jsonObject.toString());  
+}
+
+
+
+@PostMapping("/account_statement")
+ResponseEntity<String>   accountStatement(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
+    JSONObject   jsonObject =   accountService.getAccountStatement(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+   // return ResponseEntity.ok("Account is unblocked");  
+   return ResponseEntity.ok(jsonObject.toString());  
+}
+
+
 
   @GetMapping("/")
   public String home() {
@@ -108,6 +178,34 @@ ResponseEntity<String>   createAccount(@Valid @RequestBody  OpenAccountReq   new
     }
   
    
+    
+    
+   
+    
+    
+    
+    
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
+        Map<String, String> errors = new HashMap<>();
+        String  responseCode  =  "09";
+        StringBuilder   responseMessg  = new StringBuilder(100);
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
+            String fieldName = ((FieldError) error).getField();
+            responseMessg.append(fieldName).append(": ");
+            responseMessg.append(error.getDefaultMessage()).append(",");
+            // errors.put(fieldName, errorMessage);
+        });
+        errors.put("responseCode", responseCode);
+        errors.put("responseMessage", responseMessg.toString());
+        errors.put("data", null);
+        return errors;
+    }
+    
+    
+    
+    /****    
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationExceptions(MethodArgumentNotValidException ex) {
@@ -119,7 +217,7 @@ ResponseEntity<String>   createAccount(@Valid @RequestBody  OpenAccountReq   new
         });
         return errors;
     }
-    
+    ****/
     
     
   
