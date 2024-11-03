@@ -66,6 +66,12 @@ public class FundTransferReq {
     private String  beneficiaryBankCode;
     
     
+    @JsonProperty("PIN")
+    @NotBlank(message = "Authourization with PIN is required")
+    @Digits(integer = 4, fraction = 0, message = "PIN should be 4 digits") 
+    private int  PIN;
+    
+    
     @JsonProperty("narration")
     @NotBlank(message = "Narration is required")
     //@Size(min = 3, max = 6, message = "Narration be between 3 and 20 characters") 

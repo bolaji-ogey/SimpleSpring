@@ -2,13 +2,15 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package i.ogeyingbo.walletaccount.model;
- 
+package i.ogeyingbo.walletaccount.requests;
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.Column;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,42 +20,17 @@ import org.json.JSONObject;
  *
  * @author BOLAJI-OGEYINGBO
  */
-@JsonPropertyOrder({"requestId", "customerReference", "accountNumber", "accountName", "bankCode", "bvn",
-                           "isActive", "dateOpened", "lastTrxnDate", "lastCreditDate", "lastDebitDate" })
-@Getter @Setter @NoArgsConstructor 
-public class AccountModel {
-     
-    private long id;
-     
-    private  String  requestId;
- 
-    private  String  customerReference;
-     
-    private String  accountNumber;
-     
-    private String  accountName;
-     
-    private String  bankCode;
-     
-     
-    private String  bvn;
-     
-    private  boolean  isActive = true;
+@JsonPropertyOrder({"trxnReference" })
+@Getter @Setter @NoArgsConstructor  
+public class TrxnStatusQueryReq {
     
- 
-    private String  dateOpened;
+      @JsonProperty("trxnReference")
+    @NotBlank(message = "Transaction reference is required")
+    @Size(min = 12, max = 20, message = "Transaction reference should be between 12 to 20 characters") 
+    private  String  trxnReference;
     
-     
-    private String  lastTrxnDate;
-     
-    private String  lastCreditDate;
     
       
-    private String  lastDebitDate;
-    
-      
-    
-    
     public  final  JSONObject  convertToJSON(){
         JSONObject  returnedJson =  null;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -84,9 +61,24 @@ public class AccountModel {
     }
     
     
+     
+     
+     
     
-    
-    
+    public  static  TrxnStatusQueryReq  readFromJSON(String  inObjectJSON){ 
+        TrxnStatusQueryReq    trxnStatusQueryReq  =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+              objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+              trxnStatusQueryReq = objectMapper.readValue(inObjectJSON, TrxnStatusQueryReq.class);
+            }catch(Exception ex){
+                  ex.printStackTrace();
+            }finally{
+               objectMapper = null;
+            }
+        return  trxnStatusQueryReq;
+    }
+      
     
     
 }

@@ -31,6 +31,9 @@ public class  AccountProfile {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Column(name = "request_id") 
+    private  String  requestId;
 
     @Column(name = "customer_reference") 
     private  String  customerReference;

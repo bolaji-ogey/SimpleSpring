@@ -3,12 +3,13 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package i.ogeyingbo.walletaccount.model;
- 
+
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.Column;
+import java.math.BigDecimal;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,42 +19,52 @@ import org.json.JSONObject;
  *
  * @author BOLAJI-OGEYINGBO
  */
-@JsonPropertyOrder({"requestId", "customerReference", "accountNumber", "accountName", "bankCode", "bvn",
-                           "isActive", "dateOpened", "lastTrxnDate", "lastCreditDate", "lastDebitDate" })
+@JsonPropertyOrder({"transactionResponseCode", "transactionDate", "transactionAmount", "transactionStatus", "transactionEvent", 
+                         "transactionType",  "narration",  "currency", "transactionReference", "beneficiaryAccount", 
+                                             "beneficiaryAccountName",   "beneficiaryBankCode", "beneficiaryBankName" })
 @Getter @Setter @NoArgsConstructor 
-public class AccountModel {
-     
-    private long id;
-     
-    private  String  requestId;
- 
-    private  String  customerReference;
-     
-    private String  accountNumber;
-     
-    private String  accountName;
-     
-    private String  bankCode;
-     
-     
-    private String  bvn;
-     
-    private  boolean  isActive = true;
+public class TrxnHistoryModel {
     
- 
-    private String  dateOpened;
+    @JsonProperty("transactionResponseCode")
+    private  String    transactionResponseCode;
     
-     
-    private String  lastTrxnDate;
-     
-    private String  lastCreditDate;
+    @JsonProperty("transactionDate")
+    private  String    transactionDate;
     
-      
-    private String  lastDebitDate;
+    @JsonProperty("transactionAmount")
+    private  BigDecimal  transactionAmount;
     
-      
+    @JsonProperty("transactionStatus")
+    private  String    transactionStatus;
     
+    @JsonProperty("transactionEvent")
+    private  String   transactionEvent; 
     
+    @JsonProperty("transactionType")
+    private  String  transactionType; 
+    
+    @JsonProperty("narration")
+    private  String  narration; 
+    
+    @JsonProperty("currency")
+    private  String  currency; 
+    
+    @JsonProperty("transactionReference")
+    private  String  transactionReference;
+    
+    @JsonProperty("beneficiaryAccount")
+    private  String  beneficiaryAccount; 
+    
+    @JsonProperty("beneficiaryAccountName")
+    private  String  beneficiaryAccountName; 
+    
+    @JsonProperty("beneficiaryBankCode")
+    private  String  beneficiaryBankCode; 
+    
+    @JsonProperty("beneficiaryBankName")
+    private  String   beneficiaryBankName;
+    
+            
     public  final  JSONObject  convertToJSON(){
         JSONObject  returnedJson =  null;
         ObjectMapper objectMapper = new ObjectMapper();
@@ -82,11 +93,6 @@ public class AccountModel {
         }
       return  returnedJsonString;
     }
-    
-    
-    
-    
-    
     
     
 }

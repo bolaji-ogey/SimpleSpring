@@ -4,6 +4,10 @@
  */
 package i.ogeyingbo.walletaccount.model;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import com.fasterxml.jackson.annotation.PropertyAccessor;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import i.ogeyingbo.walletaccount.requests.AccountNameUpdateReq;
 import i.ogeyingbo.walletaccount.requests.OpenAccountReq;
 import jakarta.persistence.Column;
@@ -14,11 +18,15 @@ import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.json.JSONObject;
 
 /**
  *
  * @author BOLAJI-OGEYINGBO
  */
+@JsonPropertyOrder({"customerReference", "firstName", "middleName", "lastName", "bvn",
+                           "email", "phoneNumber", "dateOfBirth", "address", "location", 
+                             "state",  "country", "productCode"})
 @Getter @Setter @NoArgsConstructor 
 public class AccountProfileModel {
     
@@ -53,6 +61,39 @@ public class AccountProfileModel {
     private String  productCode;
        
     private  boolean   isActive;
+    
+    
+    
+    public  final  JSONObject  convertToJSON(){
+        JSONObject  returnedJson =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+             objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+           returnedJson =  new JSONObject(objectMapper.writeValueAsString(this));
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            objectMapper = null;
+        }
+      return  returnedJson;
+    }
+    
+    
+    public  final  String  convertToJSONString(){
+        String  returnedJsonString =  null;
+        ObjectMapper objectMapper = new ObjectMapper();
+        try{
+            objectMapper.setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
+            returnedJsonString  =   objectMapper.writeValueAsString(this);
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }finally{
+            objectMapper = null;
+        }
+      return  returnedJsonString;
+    }
+    
+    
     
     
     

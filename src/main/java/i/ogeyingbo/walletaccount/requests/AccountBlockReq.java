@@ -26,6 +26,13 @@ import org.json.JSONObject;
 @Getter @Setter @NoArgsConstructor 
 public class AccountBlockReq {
     
+    
+    @JsonProperty("requestId")
+    @NotBlank(message = "Request Id is required")
+    @Size(min = 8, max = 12, message = "Request Id should be between  8 to 12 characters ") 
+    private  String  requestId;
+    
+    
     @JsonProperty("accountNumber")
     @NotBlank(message = "Account number is required")
     @Digits(integer = 10, fraction = 0, message = "Account number should be 10 digits")

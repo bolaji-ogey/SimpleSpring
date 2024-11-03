@@ -5,15 +5,20 @@
 package i.ogeyingbo.walletaccount.service;
 
 import i.ogeyingbo.walletaccount.dao.PGAccountInterface;
-import java.util.Optional;
 import lombok.extern.slf4j.Slf4j; 
 import i.ogeyingbo.walletaccount.entities.Account;
 import i.ogeyingbo.walletaccount.entities.AccountProfile;
 import i.ogeyingbo.walletaccount.model.AccountModel;
 import i.ogeyingbo.walletaccount.model.AccountNameModel;
 import i.ogeyingbo.walletaccount.model.AccountProfileModel;
+import i.ogeyingbo.walletaccount.model.AccountStatementModel;
+import i.ogeyingbo.walletaccount.model.AccountTrxnListModel;
+import i.ogeyingbo.walletaccount.model.FundTransferModel;
+import i.ogeyingbo.walletaccount.model.TrxnHistoryModel;
 import i.ogeyingbo.walletaccount.repository.AccountProfileRepository;
 import i.ogeyingbo.walletaccount.repository.AccountRepository;
+import java.util.ArrayList;
+import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.json.JSONObject;
@@ -251,25 +256,10 @@ public class AccountService {
       if(accountProfileModel !=  null){
           
         jsonObject.put("responseCode", "00");
-        jsonObject.put("responseMessage", "Account profile is found ");
-         
-        respData.put("customerReference", accountProfileModel.getCustomerReference());
-         
-        respData.put("firstName", accountProfileModel.getFirstName()); 
-        respData.put("middleName", accountProfileModel.getMiddleName());
-        respData.put("lastName", accountProfileModel.getLastName());     
-     
-        respData.put("bvn", accountProfileModel.getBvn()); 
-        respData.put("email", accountProfileModel.getEmail());
-        respData.put("phoneNumber", accountProfileModel.getPhoneNumber());
-        respData.put("dateOfBirth", accountProfileModel.getDateOfBirth());
-        respData.put("address", accountProfileModel.getAddress());
-        respData.put("location", accountProfileModel.getLocation());
-        respData.put("state", accountProfileModel.getState());
+        jsonObject.put("responseMessage", "Account profile is found "); 
         
-        respData.put("country", accountProfileModel.getCountry());
+        jsonObject.put("data", accountProfileModel.convertToJSON());
         
-        jsonObject.put("data", respData);
       }else{
          StringBuilder  responseMssg  =  new StringBuilder(50);
          responseMssg.append("Account profile:  ").append(inCustomerRef).append(" could NOT be found");
@@ -290,49 +280,154 @@ public class AccountService {
    
    
    
+  
    
+    
+   public  JSONObject  getAccountStatement(AccountStatementModel    accountStatementModel){
+        
+           JSONObject   jsonObject =  new JSONObject();
+           JSONArray   jsonArray  =  new  JSONArray(); 
+
+            try { 
+              
+                 ArrayList<TrxnHistoryModel>   trxnHistoryModels  = pgAccountInterface.getAccountStatement(accountStatementModel);
+                 
+                if(trxnHistoryModels.size()  > 0){
+
+                     jsonObject.put("responseCode", "00");
+                     jsonObject.put("responseMessage", "Account profile is found ");
+
+                     jsonArray.putAll(trxnHistoryModels); 
+
+                     jsonObject.put("data", jsonArray);
+
+               }else{
+                  StringBuilder  responseMssg  =  new StringBuilder(50);
+                  responseMssg.append("Account profile:  ").append(inCustomerRef).append(" could NOT be found");
+                  jsonObject.put("responseCode", "07");
+                  jsonObject.put("responseMessage", responseMssg);
+                  jsonObject.put("data", "-");
+               }
+                
+            } catch (Exception e) {
+             // log.debug("Some internal error occurred", e);
+                 StringBuilder  responseMssg  =  new StringBuilder(50);
+                 responseMssg.append("Error occured while finding account profile:  ").append(inCustomerRef);
+                 jsonObject.put("responseCode", "03");
+                 jsonObject.put("responseMessage", responseMssg);
+                 jsonObject.put("data", "-");
+            }
+            return   jsonObject;
+   }
+
+
+
+
+    public  JSONObject  doFundTransfer(FundTransferModel  fundTransferModel){
+         JSONObject   jsonObject =  new JSONObject();
+        jsonObject.put("data", "-");
+        StringBuilder  responseMssg  =  new StringBuilder(50);
+        try { 
+
+         if(pgAccountInterface.doFundTransfer(fundTransferModel) == 2){
+            responseMssg.append("Account: ").append(inAccountNo.trim()).append(" is un-blocked");
+             jsonObject.put("responseCode", "00");
+             jsonObject.put("responseMessage", responseMssg.toString()); 
+          }else{
+             responseMssg.append("Account: ").append(inAccountNo.trim()).append(" cannot be found");
+             jsonObject.put("responseCode", "07");
+             jsonObject.put("responseMessage", responseMssg.toString()); 
+          }
+        } catch (Exception e) {
+         // log.debug("Some internal error occurred", e);
+            responseMssg.append("Error occured while trying to un-block account: ").append(inAccountNo.trim());
+            jsonObject.put("responseCode", "03");
+            jsonObject.put("responseMessage", responseMssg.toString());
+        }
+        return   jsonObject;
+
+   }
+
+
+
+    public  JSONObject  getTrxnStatus(String  inTrxnReference){
+            JSONObject   jsonObject =  new JSONObject();
+            JSONObject   respData =  new JSONObject(); 
+
+            try { 
+             
+                TrxnHistoryModel   trxnHistoryModel  = pgAccountInterface.getTrxnStatus(inTrxnReference);
+                
+              if(trxnHistoryModel !=  null){
+
+                jsonObject.put("responseCode", "00");
+                jsonObject.put("responseMessage", "Account profile is found ");
+  
+                jsonObject.put("data", trxnHistoryModel.convertToJSON());
+                
+              }else{
+                 StringBuilder  responseMssg  =  new StringBuilder(50);
+                 responseMssg.append("Transaction with reference:  ").append(inTrxnReference).append(" could NOT be found");
+                 jsonObject.put("responseCode", "07");
+                 jsonObject.put("responseMessage", responseMssg);
+                 jsonObject.put("data", "-");
+              }
+            } catch (Exception e) {
+             // log.debug("Some internal error occurred", e);
+                 StringBuilder  responseMssg  =  new StringBuilder(50);
+                 responseMssg.append("Error occured while getting transaction for transaction reference:  ").append(inTrxnReference);
+                 jsonObject.put("responseCode", "03");
+                 jsonObject.put("responseMessage", responseMssg);
+                 jsonObject.put("data", "-");
+            }
+            return   jsonObject;
+
+    }
+
+
+
+    
+    
+    
+   public  JSONObject  getAccountTrxnList(AccountTrxnListModel  inAccountTrxnListModel){
+  
+               JSONObject   jsonObject =  new JSONObject();
+               JSONArray   jsonArray  =  new  JSONArray(); 
+
+                try { 
+                    
+                    ArrayList<TrxnHistoryModel>   trxnHistoryModels  = pgAccountInterface.getAccountTrxnList(inAccountTrxnListModel);
+                  
+                  if(trxnHistoryModels.size()  > 0){
+
+                    jsonObject.put("responseCode", "00");
+                    jsonObject.put("responseMessage", "Account profile is found ");
+                    
+                    jsonArray.putAll(trxnHistoryModels); 
+
+                    jsonObject.put("data", jsonArray);
+                    
+                  }else{
+                     StringBuilder  responseMssg  =  new StringBuilder(50);
+                     responseMssg.append("Account profile:  ").append(inCustomerRef).append(" could NOT be found");
+                     jsonObject.put("responseCode", "07");
+                     jsonObject.put("responseMessage", responseMssg);
+                     jsonObject.put("data", "-");
+                  }
+                } catch (Exception e) {
+                 // log.debug("Some internal error occurred", e);
+                     StringBuilder  responseMssg  =  new StringBuilder(50);
+                     responseMssg.append("Error occured while finding account profile:  ").append(inCustomerRef);
+                     jsonObject.put("responseCode", "03");
+                     jsonObject.put("responseMessage", responseMssg);
+                     jsonObject.put("data", "-");
+                }
+                return   jsonObject;
+    }
+
    
   
-  
-  public JSONObject  getAccountStatement(Account  account) {
-    JSONObject   jsonObject =  new JSONObject();
-    try { 
-      accountRepository.save(account);
-      jsonObject.put("responseCode", "00");
-      jsonObject.put("responseMessage", "Account is created");
-      jsonObject.put("data", "-");
-    } catch (Exception e) {
-     // log.debug("Some internal error occurred", e);
-    }
-    return   jsonObject;
-  }
-  
-  
-  public  JSONObject creatiNewAccount(Account  account) {
-      JSONObject   jsonObject =  new JSONObject();
-    try { 
-      accountRepository.save(account);
-      jsonObject.put("responseCode", "00");
-      jsonObject.put("responseMessage", "Account is created");
-      jsonObject.put("data", "-");
-    } catch (Exception e) {
-     // log.debug("Some internal error occurred", e);
-    }
-    return   jsonObject;
-  }
-  
-  
-  /**
-  public List<Profile> getAll() {
-    return profileRepository.findAll();
-  }
-**/
-  
-  
-  public  Optional<Account> findByAccountNumber(String  accountNumber) {
-    return    accountRepository.findByAccountNumber(accountNumber);
-  }
-  
+ 
   
   
   

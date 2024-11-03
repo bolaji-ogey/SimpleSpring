@@ -4,45 +4,42 @@
  */
 package i.ogeyingbo.walletaccount.controller;
 
-import i.ogeyingbo.simplespring.entities.Profile;
+ 
 import i.ogeyingbo.walletaccount.entities.Account;
 import i.ogeyingbo.walletaccount.entities.AccountProfile;
 import i.ogeyingbo.walletaccount.model.AccountProfileModel;
+import i.ogeyingbo.walletaccount.model.AccountStatementModel;
+import i.ogeyingbo.walletaccount.model.AccountTrxnListModel;
+import i.ogeyingbo.walletaccount.model.FundTransferModel;
+import i.ogeyingbo.walletaccount.model.TrxnStatusQueryModel;
 import i.ogeyingbo.walletaccount.requests.AccountBlockReq;
 import i.ogeyingbo.walletaccount.requests.AccountLookupReq;
 import i.ogeyingbo.walletaccount.requests.AccountNameEnquiryReq;
 import i.ogeyingbo.walletaccount.requests.AccountNameUpdateReq;
 import i.ogeyingbo.walletaccount.requests.AccountStatementReq;
+import i.ogeyingbo.walletaccount.requests.AccountTrxnListReq;
 import i.ogeyingbo.walletaccount.requests.AccountUnblockReq;
+import i.ogeyingbo.walletaccount.requests.FundTransferReq;
 import i.ogeyingbo.walletaccount.requests.OpenAccountReq;
+import i.ogeyingbo.walletaccount.requests.TrxnStatusQueryReq;
 import i.ogeyingbo.walletaccount.service.AccountService;
 import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.Map;
-import lombok.extern.slf4j.Slf4j;
-import org.h2.engine.User;
+import lombok.extern.slf4j.Slf4j; 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import static org.springframework.http.MediaType.MULTIPART_FORM_DATA_VALUE;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
 
 /**
  *
@@ -52,7 +49,7 @@ import org.springframework.web.servlet.ModelAndView;
 //@Controller
 @RestController
 @Slf4j
-@RequestMapping("/account-service")
+@RequestMapping("/account-services")
 public class AccountController {
     
   @Autowired
@@ -136,10 +133,12 @@ ResponseEntity<String>   accountProfileDetail(@Valid @RequestBody   AccountLooku
 
 
 
-
+ 
 @PostMapping("/account_statement")
 ResponseEntity<String>   accountStatement(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
-    JSONObject   jsonObject =   accountService.getAccountStatement(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+    AccountStatementModel       accountStatementModel  = new  AccountStatementModel();
+    accountStatementModel.initAccountStatement(accountStatementReq);
+    JSONObject   jsonObject =   accountService.getAccountStatement(accountStatementModel);
    // return ResponseEntity.ok("Account is unblocked");  
    return ResponseEntity.ok(jsonObject.toString());  
 }
@@ -148,8 +147,10 @@ ResponseEntity<String>   accountStatement(@Valid @RequestBody   AccountStatement
 
 
 @PostMapping("/fund_transfer")
-ResponseEntity<String>   doFundTransfer(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
-    JSONObject   jsonObject =   accountService.doFundTransfer(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+ResponseEntity<String>   doFundTransfer(@Valid @RequestBody   FundTransferReq   fundTransferReq){ 
+    FundTransferModel   fundTransferModel  =  new  FundTransferModel();
+    fundTransferModel.initFundTransfer(fundTransferReq);
+    JSONObject   jsonObject =   accountService.doFundTransfer(fundTransferModel);
    // return ResponseEntity.ok("Account is unblocked");  
    return ResponseEntity.ok(jsonObject.toString());  
 }
@@ -157,8 +158,8 @@ ResponseEntity<String>   doFundTransfer(@Valid @RequestBody   AccountStatementRe
 
 
 @PostMapping("/transaction_status_query")
-ResponseEntity<String>   trxnStatusQuery(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
-    JSONObject   jsonObject =   accountService.getTrxnStatus(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+ResponseEntity<String>   trxnStatusQuery(@Valid @RequestBody   TrxnStatusQueryReq   accountStatementReq){  
+    JSONObject   jsonObject =   accountService.getTrxnStatus(accountStatementReq.getTrxnReference());
    // return ResponseEntity.ok("Account is unblocked");  
    return ResponseEntity.ok(jsonObject.toString());  
 }
@@ -166,8 +167,10 @@ ResponseEntity<String>   trxnStatusQuery(@Valid @RequestBody   AccountStatementR
 
 
 @PostMapping("/account_trxn_list")
-ResponseEntity<String>   accountTrxnList(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
-    JSONObject   jsonObject =   accountService.getAccountTrxnList(AccountStatementReq.getAccountNumber(),   AccountStatementReq.getBankCode());
+ResponseEntity<String>   accountTrxnList(@Valid @RequestBody   AccountTrxnListReq   accountTrxnListReq){
+    AccountTrxnListModel    accountTrxnListModel  =  new  AccountTrxnListModel();
+    accountTrxnListModel.initAccountTrxnList(accountTrxnListReq);
+    JSONObject   jsonObject =   accountService.getAccountTrxnList(accountTrxnListModel);
    // return ResponseEntity.ok("Account is unblocked");  
    return ResponseEntity.ok(jsonObject.toString());  
 }

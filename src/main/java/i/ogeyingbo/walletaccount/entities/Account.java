@@ -31,6 +31,9 @@ public class  Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    
+    @Column(name = "request_id") 
+    private  String  requestId;
 
     @Column(name = "customer_reference") 
     private  String  customerReference;
@@ -69,7 +72,7 @@ public class  Account {
     
     
     @Column(name = "last_debit_date")  
-    private String  last_debit_date;
+    private String  lastDebitDate;
     
       
     

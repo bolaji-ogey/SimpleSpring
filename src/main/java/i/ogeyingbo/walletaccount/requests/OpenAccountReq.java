@@ -30,6 +30,11 @@ import org.json.JSONObject;
                              "state",  "country", "productCode"})
 @Getter @Setter @NoArgsConstructor    
 public class OpenAccountReq {
+    
+    @JsonProperty("requestId")
+    @NotBlank(message = "Request Id is required")
+    @Size(min = 8, max = 12, message = "Request Id should be between  8 to 12 characters ") 
+    private  String  requestId;
      
     @JsonProperty("customerReference")
     @NotBlank(message = "Customer reference is required")
