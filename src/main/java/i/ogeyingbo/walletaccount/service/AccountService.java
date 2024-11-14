@@ -27,8 +27,9 @@ import org.json.JSONObject;
  *
  * @author BOLAJI-OGEYINGBO
  */
-@Service
+
 @Slf4j
+@Service
 public class AccountService {
     
   @Autowired

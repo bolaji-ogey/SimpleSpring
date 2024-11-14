@@ -7,6 +7,7 @@ package i.ogeyingbo.walletaccount.response;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.PropertyAccessor;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,10 +20,12 @@ import org.json.JSONObject;
 @Getter @Setter @NoArgsConstructor  
 public class  GenericResponse {
     
+    
      private  String  responseCode;
      
      private  String  responseMessage;
      
+     private   List<GenericRespDataInterface>   data  =  null;
      
      
       public  final  JSONObject  convertToJSON(){
