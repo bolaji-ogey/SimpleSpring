@@ -489,7 +489,8 @@ public class PGAccountInterface {
            return   accountProfileModel;
        }
      
-     
+    
+    /***
     public   ArrayList<TrxnHistoryModel>     getAccountStatement(AccountStatementModel  accountStatementModel){
         ;
     }
@@ -511,7 +512,7 @@ public class PGAccountInterface {
     
     }
     
-    
+    ***/
     
      
     

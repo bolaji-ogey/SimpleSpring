@@ -132,7 +132,7 @@ ResponseEntity<String>   accountProfileDetail(@Valid @RequestBody   AccountLooku
 }
 
 
-
+/***
  
 @PostMapping("/account_statement")
 ResponseEntity<String>   accountStatement(@Valid @RequestBody   AccountStatementReq   accountStatementReq){ 
@@ -175,7 +175,7 @@ ResponseEntity<String>   accountTrxnList(@Valid @RequestBody   AccountTrxnListRe
    return ResponseEntity.ok(jsonObject.toString());  
 }
 
- 
+***/ 
    
     
     
